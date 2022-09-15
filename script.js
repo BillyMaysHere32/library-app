@@ -15,13 +15,35 @@ function addBookToLibrary(title, author, pages, read) {
 
 function displayBooksOnPage() {
     const books = document.querySelector('.books');
-    myLibrary.forEach(myLibrary => {
+    
+    const removeCards = document.querySelectorAll('.card');
+    for (let i = 0; i < removeCards.length; i++) {
+        removeCards[i].remove();
+    }
+
+    let index = 0;
+    myLibrary.forEach(myLibrarys => {
         const card = document.createElement('div');
         card.classList.add('card');
         books.appendChild(card);
-        for (let key in myLibrary) {
+
+        const removeBookButton = document.createElement('button');
+        removeBookButton.classList.add('remove-book-button');
+        removeBookButton.textContent = 'Remove Book';
+        card.appendChild(removeBookButton);
+        removeBookButton.dataset.linkedArray = index;
+        index++;
+        removeBookButton.addEventListener('click', removeBook);
+        function removeBook() {
+            let bookToRemove = removeBookButton.dataset.linkedArray;
+            myLibrary.splice(parseInt(bookToRemove), 1);
+            card.remove();
+            displayBooksOnPage();
+        }
+
+        for (let key in myLibrarys) {
             const para = document.createElement('p');
-            para.textContent = (`${key}: ${myLibrary[key]}`);
+            para.textContent = (`${key}: ${myLibrarys[key]}`);
             card.appendChild(para);
         }
     })
@@ -44,6 +66,7 @@ function intakeFormData() {
     let read = document.getElementById('read').value;
 
     if ((title == "") || (author == "") || (pages == "") || (read == "")) {
+        alert('Please fill out all fields');
         return;
     }
     addBookToLibrary(title, author, pages, read);
