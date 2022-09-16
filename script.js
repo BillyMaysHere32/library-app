@@ -32,7 +32,6 @@ function displayBooksOnPage() {
         removeBookButton.textContent = 'Remove Book';
         card.appendChild(removeBookButton);
         removeBookButton.dataset.linkedArray = index;
-        index++;
         removeBookButton.addEventListener('click', removeBook);
         function removeBook() {
             let bookToRemove = removeBookButton.dataset.linkedArray;
@@ -41,11 +40,35 @@ function displayBooksOnPage() {
             displayBooksOnPage();
         }
 
+        const readButton = document.createElement('button');
+        readButton.classList.add('read-button');
+        readButton.textContent = 'Read/Not Read';
+        
+        readButton.dataset.linkedArray = index;
+        card.appendChild(readButton);
+        readButton.addEventListener('click', toggleReadButton);
+        
+        function toggleReadButton() {
+            let bookToToggle = readButton.dataset.linkedArray;
+            Book.prototype = Object.create(Book.prototype);
+            const toggleBook = new Book();
+            if ((myLibrary[parseInt(bookToToggle)].read) == "Yes") {
+                toggleBook.read = "No";
+                myLibrary[parseInt(bookToToggle)].read = toggleBook.read;
+            } else if ((myLibrary[parseInt(bookToToggle)].read) == "No") {
+                toggleBook.read = "Yes";
+                myLibrary[parseInt(bookToToggle)].read = toggleBook.read;
+            }
+            displayBooksOnPage();
+        }
+        
+
         for (let key in myLibrarys) {
             const para = document.createElement('p');
             para.textContent = (`${key}: ${myLibrarys[key]}`);
             card.appendChild(para);
         }
+    index++;
     })
 }
 
@@ -79,11 +102,4 @@ resetButton.addEventListener('click', resetForm);
 function resetForm() {
     document.getElementById('add-book').reset();
 }
-
-// addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', '295 pages', 'not read yet');
-// console.log(myLibrary);
-
-
-
-
 
